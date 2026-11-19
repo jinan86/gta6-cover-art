@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice Cover Studio — make your own GTA-style cover art</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">VCS</span>
+    <span class="brand-name">Vice Cover Studio</span>
+    <span class="brand-tag">offline cover art maker</span>
+  </div>
+  <div class="top-actions">
+    <label class="size-label" for="size">Export size</label>
+    <select id="size">
+      <option value="1080x1080" selected>1080 × 1080 · square</option>
+      <option value="1080x1350">1080 × 1350 · portrait</option>
+      <option value="1920x1080">1920 × 1080 · wide</option>
+    </select>
+    <button id="export" class="btn-primary" type="button">Export PNG</button>
+  </div>
+</header>
+
+<main class="studio">
+  <section class="stage">
+    <div class="canvas-wrap">
+      <canvas id="cover" width="1080" height="1080"></canvas>
+      <p class="hint">Drag a panel to move its photo · scroll over a panel to zoom · click a panel to select it</p>
+    </div>
+    <div class="steps">
+      <ol>
+        <li><strong>1 · Photos</strong> — pick a sample or upload your own.</li>
+        <li><strong>2 · Panels</strong> — choose a layout, drag and zoom each photo.</li>
+        <li><strong>3 · Words</strong> — write the title and tagline.</li>
+        <li><strong>4 · Export</strong> — one click, a PNG in your size.</li>
+      </ol>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <section class="group" aria-label="Layout">
+      <h2>Layout</h2>
+      <div class="layout-grid" role="group" aria-label="Panel layout">
+        <button type="button" class="layout-btn" data-layout="full" aria-pressed="false">
+          <span class="thumb thumb-full"></span>Full bleed
+        </button>
+        <button type="button" class="layout-btn" data-layout="split" aria-pressed="false">
+          <span class="thumb thumb-split"></span>Split · 2
+        </button>
+        <button type="button" class="layout-btn" data-layout="hero" aria-pressed="true">
+          <span class="thumb thumb-hero"></span>Hero + 2
+        </button>
+        <button type="button" class="layout-btn" data-layout="grid" aria-pressed="false">
+          <span class="thumb thumb-grid"></span>Grid · 4
+        </button>
+      </div>
+    </section>
+
+    <section class="group" aria-label="Photos">
+      <h2>Photos <span class="count" id="photo-count"></span></h2>
+      <p class="note">Photos stay on your machine — nothing is uploaded.</p>
+      <div class="photo-row">
+        <button type="button" class="sample-btn" data-sample="samples/boulevard.jpg">
+          <img src="samples/boulevard.jpg" alt="Sample photo: boulevard at golden hour">
+          <span>Boulevard</span>
+        </button>
+        <button type="button" class="sample-btn" data-sample="samples/pier.jpg">
+          <img src="samples/pier.jpg" alt="Sample photo: fisherman on a pier">
+          <span>Pier</span>
+        </button>
+        <label class="upload-btn" for="upload">
+          <span class="upload-plus">+</span>
+          <span>Upload photo</span>
+          <input id="upload" type="file" accept="image/*" multiple hidden>
+        </label>
+      </div>
+      <div class="photo-slots" id="photo-slots"></div>
+    </section>
+
+    <section class="group" aria-label="Selected panel">
+      <h2>Selected panel <span class="count" id="panel-name"></span></h2>
+      <label class="field">
+        <span>Photo in this panel</span>
+        <select id="panel-photo"></select>
+      </label>
+      <label class="field">
+        <span>Zoom <output id="zoom-out">100%</output></span>
+        <input id="zoom" type="range" min="100" max="300" value="100">
+      </label>
+      <div class="field-row">
+        <button type="button" id="pan-reset" class="btn-ghost">Reset position</button>
+        <button type="button" id="fill-all" class="btn-ghost">Fill all panels with this photo</button>
+      </div>
+    </section>
+
+    <section class="group" aria-label="Caption">
+      <h2>Caption</h2>
+      <label class="field">
+        <span>Title</span>
+        <input id="title" type="text" value="VICE NIGHTS" maxlength="24" autocomplete="off">
+      </label>
+      <label class="field">
+        <span>Tagline</span>
+        <input id="subtitle" type="text" value="a story in four panels" maxlength="48" autocomplete="off">
+      </label>
+      <div class="field-row">
+        <label class="field field-half">
+          <span>Title position</span>
+          <select id="title-pos">
+            <option value="bottom" selected>Bottom</option>
+            <option value="top">Top</option>
+          </select>
+        </label>
+        <label class="field field-half">
+          <span>Title style</span>
+          <select id="title-style">
+            <option value="sunset" selected>Sunset gradient</option>
+            <option value="neon">Neon pink</option>
+            <option value="white">Solid white</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="group" aria-label="Colour grade">
+      <h2>Colour grade</h2>
+      <div class="grade-row" role="group" aria-label="Colour grade">
+        <button type="button" class="grade-btn" data-grade="sunset" aria-pressed="true">
+          <span class="swatch sw-sunset"></span>Sunset
+        </button>
+        <button type="button" class="grade-btn" data-grade="neon" aria-pressed="false">
+          <span class="swatch sw-neon"></span>Neon
+        </button>
+        <button type="button" class="grade-btn" data-grade="vice" aria-pressed="false">
+          <span class="swatch sw-vice"></span>Vice pink
+        </button>
+        <button type="button" class="grade-btn" data-grade="noir" aria-pressed="false">
+          <span class="swatch sw-noir"></span>Noir
+        </button>
+      </div>
+      <label class="check"><input id="grain" type="checkbox" checked> Film grain</label>
+      <label class="check"><input id="vignette" type="checkbox" checked> Vignette</label>
+    </section>
+
+    <section class="group" aria-label="Export">
+      <h2>Export</h2>
+      <p class="note">PNG, exactly the size you picked — ready to post.</p>
+      <div class="export-row">
+        <button type="button" class="btn-ghost export-size" data-export="1080x1080">1080²</button>
+        <button type="button" class="btn-ghost export-size" data-export="1080x1350">1080×1350</button>
+        <button type="button" class="btn-ghost export-size" data-export="1920x1080">1920×1080</button>
+      </div>
+      <p class="status" id="status" role="status"></p>
+    </section>
+
+    <footer class="fineprint">
+      <p>All art here is original. No Rockstar Games logo, artwork or font is used.
+      Lettering: Bebas Neue &amp; Pacifico, SIL Open Font License (see <a href="fonts/OFL.txt">fonts/OFL.txt</a>).
+      Sample photos were made with an image model for make.fun and are free to use.</p>
+    </footer>
+  </aside>
+</main>
+
+<script type="module" src="src/editor.js"></script>
+</body>
+</html>
